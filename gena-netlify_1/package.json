@@ -1,0 +1,10 @@
+{
+  "name": "gena",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gena — Green Energy Alert. Consommer l'électricité quand elle est verte (DE/FR).",
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
