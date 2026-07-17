@@ -69,7 +69,7 @@ export default async () => {
       const fc = await forecastAt(p.lat, p.lon, target);
       if (!fc) continue;
       const { price, norm } = await priceAt(p.country, target);
-      const h = new Date(fc.localISO).getHours();
+      const h = fc.localHour;
       const score = computeScore(fc.wind, fc.sun, demandCurve(h), norm);
 
       if (score >= 60) {
