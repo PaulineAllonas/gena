@@ -423,7 +423,7 @@ footer{border-top:1.5px solid var(--line);margin-top:2rem}
 
 <!-- ALERTS + BUSINESS CONTACT -->
 <section class="section" id="alerts">
-  <div class="split">
+  <div style="max-width:560px;margin:0 auto">
     <form class="form-card" id="alertForm">
       <div class="eyebrow" data-i18n="al_eyebrow"></div>
       <h2 data-i18n="al_title"></h2>
@@ -465,39 +465,6 @@ footer{border-top:1.5px solid var(--line);margin-top:2rem}
       <button class="submit" type="submit" id="alSubmit" data-i18n="al_btn"></button>
       <div class="confirm" id="alConfirm" data-i18n="al_ok" role="status"></div>
       <div class="confirm" id="alError" style="background:#F6DED5;color:var(--bad)" data-i18n="al_err" role="alert"></div>
-    </form>
-
-    <form class="form-card biz" id="bizForm" name="business-contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="business-contact">
-      <p style="display:none"><label>Ne pas remplir : <input name="bot-field"></label></p>
-      <div class="eyebrow" data-i18n="bz_eyebrow"></div>
-      <h2 data-i18n="bz_title"></h2>
-      <p class="sub" style="font-size:.95rem;color:#cfe3cf" data-i18n="bz_sub"></p>
-      <div class="f-row">
-        <label for="bzCo" data-i18n="f_company"></label>
-        <input id="bzCo" name="company" type="text" required>
-      </div>
-      <div class="f-row">
-        <label for="bzMail" data-i18n="f_email"></label>
-        <input id="bzMail" name="email" type="email" required>
-      </div>
-      <div class="f-row">
-        <label for="bzSector" data-i18n="f_sector"></label>
-        <select id="bzSector" name="use-case">
-          <option data-i18n="sec_fleet"></option>
-          <option data-i18n="sec_cold"></option>
-          <option data-i18n="sec_ind"></option>
-          <option data-i18n="sec_office"></option>
-          <option data-i18n="sec_other"></option>
-        </select>
-      </div>
-      <div class="f-row">
-        <label for="bzMsg" data-i18n="f_msg"></label>
-        <textarea id="bzMsg" name="message" rows="3"></textarea>
-      </div>
-      <button class="submit" type="submit" id="bzSubmit" data-i18n="bz_btn"></button>
-      <div class="confirm" id="bzConfirm" data-i18n="bz_ok" role="status"></div>
-      <div class="confirm" id="bzError" style="background:#F6DED5;color:var(--bad)" data-i18n="bz_err" role="alert"></div>
     </form>
   </div>
 </section>
@@ -1043,25 +1010,6 @@ document.getElementById("alertForm").addEventListener("submit", async e=>{
     e.target.reset();
   }catch(_){ err.classList.add("show"); }
   btn.disabled = false; btn.textContent = oldTxt;
-});
-
-/* ---- business form: Netlify Forms (notification -> owner inbox) ---- */
-document.getElementById("bizForm").addEventListener("submit", async e=>{
-  e.preventDefault();
-  const form = e.target;
-  const ok = document.getElementById("bzConfirm");
-  const err = document.getElementById("bzError");
-  ok.classList.remove("show"); err.classList.remove("show");
-  const btn = document.getElementById("bzSubmit");
-  btn.disabled = true;
-  try{
-    const body = new URLSearchParams(new FormData(form)).toString();
-    const r = await fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
-    if(!r.ok) throw new Error("form");
-    ok.classList.add("show");
-    form.reset();
-  }catch(_){ err.classList.add("show"); }
-  btn.disabled = false;
 });
 
 /* ---- banners after confirm / unsubscribe redirects ---- */
