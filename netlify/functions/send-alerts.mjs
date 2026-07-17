@@ -15,12 +15,12 @@ const FREQ_GAP_H = { day: 20, week: 6.5 * 24, month: 27 * 24 };
 async function forecastAt(lat, lon, target) {
   const u = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=shortwave_radiation,wind_speed_100m&forecast_days=2&timezone=auto`;
   const j = await (await fetch(u)).json();
-  const iso = j.hourly.time.find((t) => Math.abs(new Date(t) - target) < 1800e3);
-  if (!iso) return null;
-  const i = j.hourly.time.indexOf(iso);
-  const sun = Math.min(1, (j.hourly.shortwave_radiation[i] ?? 0) / 750);
-  const wind = Math.pow(Math.min(1, (j.hourly.wind_speed_100m[i] ?? 0) / 45), 1.6);
-  return { sun, wind, localISO: iso };
+  const off = (j.utc_offset_seconds || 0) * 1000;
+  const idx = j.hourly.time.findIndex((t) => Math.abs(Date.parse(t + "Z") - off - target) < 1800e3);
+  if (idx === -1) return null;
+  const sun = Math.min(1, (j.hourly.shortwave_radiation[idx] ?? 0) / 750);
+  const wind = Math.pow(Math.min(1, (j.hourly.wind_speed_100m[idx] ?? 0) / 45), 1.6);
+  return { sun, wind, localHour: Number(j.hourly.time[idx].slice(11, 13)) };
 }
 
 async function priceAt(country, target) {
